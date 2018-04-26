@@ -15,6 +15,7 @@ class AdminLogin extends Model{
 	 */
 	public function checkLogin($data){
 		$res=db('admin')->where($data)->find();
+
 		if($res){
 			if($res['status']==1){
 				return array('id'=>$res['id'],'name'=>$res['name']);
@@ -34,6 +35,7 @@ class AdminLogin extends Model{
 	 */
 	public function updateLogin($admin,$data){
 		$res=db('admin')->where('id',$admin['id'])->update($data);
+		
 		if($res){
 			session('aid',$admin['id']);
 			session('adminname',$admin['name']);

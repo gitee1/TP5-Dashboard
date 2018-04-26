@@ -44,6 +44,7 @@ class Login extends Controller{
 			];
 			$login=new AdminLogin;
 			$res=$login->checkLogin(['name'=>input('post.name'),'password'=>input('post.password')]);	//检查管理员信息
+
 			if($res===-1){	
 				return json(['code'=>0,'msg'=>'该账户被禁用']);
 			}elseif($res===0){
@@ -91,6 +92,7 @@ class Login extends Controller{
 	 * @return [type] [description]
 	 */
 	public function cacheClear(){
+		//清除菜单列表的缓存
 		Cache::clear('navNode');
 		return $this->redirect('index/index');
 	}

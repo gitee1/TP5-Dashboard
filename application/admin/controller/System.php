@@ -19,6 +19,7 @@ class System extends Base{
 	 */
 	public function admin(){
 		$pageSize=6;
+
 		$content=AdminAdmin::paginate($pageSize);
 		$page=$content->render();
 
@@ -41,6 +42,7 @@ class System extends Base{
 			$admin=new AdminAdmin;
 			$checkName=$admin->check('name',$name);
 			$checkNowPass=$admin->check('pass',md5($nowpass));
+
 			if($checkName===true){
 				return json(['code'=>0,'msg'=>'管理员名称被占用']);
 			}
@@ -50,6 +52,7 @@ class System extends Base{
 			if($password!=$repass){
 				return json(['code'=>0,'msg'=>'两次密码输入不一致']);
 			}
+
 			$res=$admin->addAdmin(['name'=>$name,'password'=>md5($password)]);
 			if($res===true){
 				return json(['code'=>1,'msg'=>'添加成功']);
@@ -71,6 +74,7 @@ class System extends Base{
 			$nowpass=input('post.newnowpass','','htmlspecialchars');
 
 			$checkNowPass=$admin->check('pass',md5($nowpass));
+
 			if($checkNowPass===false){
 				return json(['code'=>0,'msg'=>'当前管理员密码错误']);
 			}
@@ -79,6 +83,7 @@ class System extends Base{
 			}
 			
 			$res=$admin->updateAdmin($id,['password'=>md5($pass)]);
+
 			if($res===true){
 				return json(['code'=>1,'msg'=>'密码修改成功。请牢记新密码']);
 			}else{
@@ -99,6 +104,7 @@ class System extends Base{
 				if($status==1 || $status==0){
 					$admin=new AdminAdmin;
 					$res=$admin->updateAdmin($id,['status'=>$status]);
+
 					if($res===true){
 						return json(['code'=>1,'msg'=>'操作成功']);
 					}else{
@@ -178,6 +184,7 @@ class System extends Base{
 		$id=explode(',',input('get.id'));
 		$status=input('get.status','','intval');	
 		$data=['status'=>$status];
+		
 		$auth=new AdminGroup; 
 		$res=$auth->updateGroup($id,$data);
 
@@ -462,5 +469,4 @@ class System extends Base{
 		}
 	}
 
-	
 }

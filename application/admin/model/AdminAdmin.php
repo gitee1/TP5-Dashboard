@@ -17,6 +17,7 @@ class AdminAdmin extends Model{
 	 */
 	public function addAdmin($data){
 		$res=db('admin')->insert($data);
+
 		if($res){
 			return true;
 		}else{
@@ -56,6 +57,7 @@ class AdminAdmin extends Model{
 	 */
 	public function updateAdmin($id,$data){
 		$res=db('admin')->where('id',$id)->update($data);
+
 		if($res){
 			return true;
 		}else{
@@ -70,6 +72,7 @@ class AdminAdmin extends Model{
 	 */
 	public function delAdmin($id){
 		$res=db('admin')->where('id',$id)->delete();
+		
 		if($res){
 			return true;
 		}else{

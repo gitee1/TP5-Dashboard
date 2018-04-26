@@ -15,9 +15,11 @@ class Base extends Controller{
 		}
 
 		$this->assign('hi','Hello!');
+
 		//处理左侧导航栏
 		$menu=$this->getMenu();
 		$this->assign('menu',$menu);
+
 		//权限检测，不检测id为1的管理员，这里是系统管理员system
 		if(session('aid')!=1){
  			$hasAuth=$this->hasAuth();
@@ -25,8 +27,9 @@ class Base extends Controller{
 	 			return $this->error('没有操作权限','index/index');
 	 		}
 		}
-
+		//拼接出模块/控制器
 		$parent_url=strtolower(Request()->module().'/'.Request()->controller());
+		//拼接出模块/控制器/操作
 		$child_url=strtolower(Request()->module().'/'.Request()->controller().'/'.Request()->action());
 
 		$this->assign('parent_url',$parent_url);
@@ -74,10 +77,15 @@ class Base extends Controller{
 	 * @return boolean [description]
 	 */
 	public function hasAuth(){
+		//获取模块
 		$module=Request()->module();
+		//获取模块/控制器
 		$controller=Request()->module().'/'.Request()->controller();
+		//获取模块/控制器/操作
  		$act=strtolower(Request()->module().'/'.Request()->controller().'/'.Request()->action());
+
  		$auth=new Auth;
+ 		//权限判断
  		if(!$auth->check($act,session('aid')) && !$auth->check($module,session('aid')) && !$auth->check($controller,session('aid'))){
  			return true;
  		}else{

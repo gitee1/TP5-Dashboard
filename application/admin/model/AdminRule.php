@@ -37,9 +37,10 @@ class AdminRule extends Model{
 			$res[$ck]['id']     = $cv['id'];
 			$res[$ck]['title']  = $cv['title'];
 			$res[$ck]['url']    = $cv['name'];
-			$res[$ck]['child']  = db('auth_rule')->where('pid',$cv['id'])
-			                                     ->cache('auth_rule_child_'.$cv['id'],7200,'rulesList')
-			                                     ->select();
+			$res[$ck]['child']  = db('auth_rule')
+			                      ->where('pid',$cv['id'])
+                                  ->cache('auth_rule_child_'.$cv['id'],7200,'rulesList')
+                                  ->select();
 		}
 		return $res;
 	}
@@ -68,6 +69,7 @@ class AdminRule extends Model{
 	 */
 	public function updateRules($id,$data){
 		$res=db('auth_rule')->where('id',$id)->update($data);
+
 		if($res){
 			//更新成功，删除缓存
 			Cache::clear('rulesList');
@@ -84,6 +86,7 @@ class AdminRule extends Model{
 	 */
 	public function delRules($id){
 		$pid=db('auth_rule')->where('pid',$id)->find();
+		
 		if(!$pid){
 			$count=db('auth_rule')->count();
 			if($count==1){

@@ -55,13 +55,16 @@ class AdminMenu extends Model{
 	public function showList(){
 		$parents=db('menu')->where(['pid'=>'0'])->order('sort','desc')->select();
 		foreach($parents as $pk => $pv){
-			$nodes[$pk]['id']=$pv['id'];
-			$nodes[$pk]['sort']=$pv['sort'];
+			$nodes[$pk]['id']    =$pv['id'];
+			$nodes[$pk]['sort']  =$pv['sort'];
 			$nodes[$pk]['status']=$pv['status'];
-			$nodes[$pk]['title']=$pv['title'];
-			$nodes[$pk]['icon']=$pv['icon'];
-			$nodes[$pk]['url']=$pv['url'];
-			$nodes[$pk]['child']=db('menu')->where(['pid'=>$pv['id']])->order('sort','desc')->select();
+			$nodes[$pk]['title'] =$pv['title'];
+			$nodes[$pk]['icon']  =$pv['icon'];
+			$nodes[$pk]['url']   =$pv['url'];
+			$nodes[$pk]['child'] =db('menu')
+			                     ->where(['pid'=>$pv['id']])
+			                     ->order('sort','desc')
+			                     ->select();
 		}
 		return $nodes;
 	}
@@ -73,6 +76,7 @@ class AdminMenu extends Model{
 	 */
 	public function addMenu($data){
 		$res=db('menu')->insert($data);
+
 		if($res){
 			return true;
 		}else{
@@ -105,6 +109,7 @@ class AdminMenu extends Model{
 	public function delNode($id){
 		//直接看有没有菜单的pid为当前菜单id，有则说明有子节点。不可删除
 		$nodes=db('menu')->where('pid',$id)->find();
+		
 		if($nodes){	//说明有子节点，不可删除
 			return -1;
 		}else{

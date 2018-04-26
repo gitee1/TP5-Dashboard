@@ -17,6 +17,7 @@ class AdminGroup extends Model{
 	 */
 	public function addGroup($data){
 		$res=db('auth_group')->insert($data);
+
 		if($res){
 			return true;
 		}else{
@@ -32,6 +33,7 @@ class AdminGroup extends Model{
 	 */
 	public function updateGroup($id,$data){
 		$res=db('auth_group')->where('id','in',$id)->update($data);
+
 		if($res){
 			return true;
 		}else{
@@ -46,6 +48,7 @@ class AdminGroup extends Model{
 	 */
 	public function delGroup($id){
 		$res=db('auth_group')->where('id','in',$id)->delete();
+
 		if($res){
 			return true;
 		}else{
@@ -62,6 +65,7 @@ class AdminGroup extends Model{
 	 */
 	public function getAdmin($id){
 		$res=db('auth_group_access')->where('group_id',$id)->select();
+
 		if($res){
 			return $res;
 		}else{
@@ -77,6 +81,7 @@ class AdminGroup extends Model{
 	 */
 	public function updateGroupAccess($group_id,$uid){
 		db('auth_group_access')->where('group_id',$group_id)->delete();
+		
 		foreach($uid as $uk => $uv){
 			$res=db('auth_group_access')->insert(['uid'=>$uv,'group_id'=>$group_id]);
 			if(!$res){
