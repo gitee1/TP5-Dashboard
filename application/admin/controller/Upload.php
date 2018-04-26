@@ -283,5 +283,22 @@ class Upload extends Base{
 	    }
 	}
 
+	public function cutImg($img_url,$width,$height=0){
+		$image = \think\Image::open($img_url);
+		if($height===0){
+			$height=($width/$image->width())*$image->height();
+		}else{
+			$width=(int)$width;
+			$height=(int)$height;
+		}
+
+		if(is_file('../public/uploads/test.png')){
+			unlink('../public/uploads/test.png');
+		}
+
+		$thumb=$image->thumb($width,$height,\think\Image::THUMB_FIXED)->save('../public/uploads/test.png');
+		return '/public/uploads/test.png';		
+	}
+
 	
 }

@@ -34,6 +34,9 @@ class Base extends Controller{
 
 		$this->assign('parent_url',$parent_url);
 		$this->assign('child_url',$child_url);
+		
+		$bottomYear=date('Y');
+		$this->assign('year',$bottomYear);
 	}
 
 	/**

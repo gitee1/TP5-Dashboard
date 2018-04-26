@@ -25,7 +25,7 @@ class System extends Base{
 
 		$this->assign('content',$content);
 		$this->assign('page',$page);
-
+		
 		return $this->fetch();
 	}
 
