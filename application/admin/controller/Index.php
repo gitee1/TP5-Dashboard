@@ -2,7 +2,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
-use think\Image;
+
 /**
  * 总控制台
  */
@@ -15,6 +15,5 @@ class Index extends Base{
 
 		return $this->fetch();
 	}
-
 
 }
