@@ -1,0 +1,273 @@
+<{extends file="../public/common.html"}>
+<{block name="content"}>
+<div class="alert alert-block" style="display:none">
+	<button type="button" class="close" data-dismiss="alert">
+		<i class="ace-icon fa fa-times"></i>
+	</button>
+	<span></span>
+</div>
+<div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    修改密码
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" id="pass_form" method="" action="">
+                	<input type="text" id="id" name="id" readonly style="display:none;" />
+                    <div class="form-group">
+                        <label for="newpass" class="col-sm-3 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="newpass" name="newpass">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newrepass" class="col-sm-3 control-label">确认新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="newrepass" name="renewpass">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newnowpass" class="col-sm-3 control-label">当前管理员密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="newnowpass" name="nownewpass">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            	<span id="change_tip" style="display:none;color:red;"> </span>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                	关闭
+                </button>
+                <button type="button" class="btn btn-primary btn-hide" onclick="changePass()">
+                    提交
+                </button>
+                
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    管理员信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" id="msg_form" method="" action="">
+                	<div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">管理员名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-3 control-label">密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="repass" class="col-sm-3 control-label">确认密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="repass" name="repass">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nowpass" class="col-sm-3 control-label">当前管理员密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="nowpass" name="nowpass">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            	<span id="tip" style="display:none;color:red;"></span>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                	关闭
+                </button>
+                <button type="button" class="btn btn-primary btn-hide" onclick="ajaxSubmit()">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<p>
+	<button class="btn btn-primary btn-sm" data-toggle="modal"  data-target="#addUserModal">
+    添加管理员
+    </button>
+</p>
+<div class="row">
+	<div class="col-xs-12">
+		<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="col-xs-1 text-center">名称</th>
+					<th class="col-xs-2 text-center">上次登录时间</th>
+					<th class="col-xs-2 text-center">上次登录IP</th>
+					<th class="col-xs-1 text-center">状态</th>
+					<th class="col-xs-2 text-center">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<{foreach $content as $k => $v}>
+				<tr class="text-center">
+					<td><{$v.name}></td>
+					<td><{$v.last_time|date_format:"%Y-%m-%d %H:%M:%S"}></td>
+					<td><{$v.last_ip}></td>
+					<td><{if $v.status==0}>禁用中...<{elseif $v.status==1}>启用中...<{/if}></td>
+					<td>
+						<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#changePass" onclick="sendId(<{$v.id}>)">
+		                修改密码
+		                </button>
+		                <{if $v.status==0}>
+							<button class="btn btn-yellow btn-sm" onclick="status(<{$v.id}>,1)">启用</button>
+		                <{elseif $v.status==1}>
+							<button class="btn btn-yellow btn-sm" onclick="status(<{$v.id}>,0)">禁用</button>
+		                <{/if}>
+		                <button class="btn btn-danger btn-sm" onclick="del(<{$v.id}>)">
+		                删除
+		            	</button> 
+					</td>
+				</tr>
+				<{/foreach}>
+				<tr><td colspan="8" class="center"><{$page}></td></tr>
+			</tbody>
+		</table>
+
+	</div><!-- /.span -->
+</div>
+<{/block}>
+<{block name="script"}>
+<script type="text/javascript">
+	function ajaxSubmit(){
+		var emptyFlag=0;
+		$('#msg_form input').each(function(){
+			if($.trim($(this).val())==""){
+				$(this).parents('.form-group').addClass('has-error');
+			}else{
+				$(this).parents('.form-group').removeClass('has-error');
+				emptyFlag++;
+			}
+		});
+		if($.trim($('#repass').val())!=""){
+			if($('#password').val()!=$('#repass').val()){
+				$('#repass').parents('.form-group').addClass('has-error');
+			}else{
+				$('#repass').parents('.form-group').removeClass('has-error');
+				emptyFlag++;
+			}
+		}
+		if(emptyFlag==5){
+			$.ajax({
+				type:'post',
+				url:'<{url('addAdmin')}>',
+				data:{'name':$('#name').val(),'password':$('#password').val(),'repass':$('#repass').val(),'nowpass':$('#nowpass').val()},
+				success:function(data){
+					if(data.code){
+						$('#tip').html(data.msg).show().fadeOut(3000,location.reload());
+					}else{
+						$('#tip').html(data.msg).show();
+					}
+				}
+			});
+		}
+	}
+
+	function sendId(id){
+		$('#id').val(id);
+	}
+
+	function changePass(){
+		var emptyFlag=0;
+		$('#pass_form input').each(function(){
+			if($.trim($(this).val())==""){
+				$(this).parents('.form-group').addClass('has-error');
+			}else{
+				$(this).parents('.form-group').removeClass('has-error');
+				emptyFlag++;
+			}
+		});
+		if($.trim($('#newrepass').val())!=""){
+			if($('#newpass').val()!=$('#newrepass').val()){
+				$('#newrepass').parents('.form-group').addClass('has-error');
+			}else{
+				$('#newrepass').parents('.form-group').removeClass('has-error');
+				emptyFlag++;
+			}
+		}
+		if(emptyFlag==5){
+			$.ajax({
+				type:"post",
+				url:"<{url('updateAdmin')}>",
+				data:{'id':$('#id').val(),'newpass':$('#newpass').val(),'newrepass':$('#newrepass').val(),'newnowpass':$('#newnowpass').val()},
+				success:function(data){
+					if(data.code){
+						$('#change_tip').html(data.msg).show().fadeOut(3000,location.reload());
+					}else{
+						$('#change_tip').html(data.msg).show();
+					}
+				}
+			});
+		}
+	}
+
+	function status(id,status){
+		bootbox.confirm('确认更改管理员状态？',function(res){
+			if(res){
+				$.ajax({
+					type:'post',
+					url:'<{url('statusAdmin')}>',
+					data:{'id':id,'status':status},
+					success:function(data){
+						if(data.code){
+							$('.alert-block').removeClass('alert-danger');
+							$('.alert-block span').html(data.msg);
+							$('.alert-block').addClass('alert-info').show().fadeOut(3000,location.reload());
+						}else{
+							$('.alert-block').removeClass('alert-info');
+							$('.alert-block span').html(data.msg);
+							$('.alert-block').addClass('alert-danger').show().fadeOut(3000);
+						}
+					}
+				});
+			}
+		});
+	}
+
+	function del(id){
+		bootbox.confirm('确认删除该管理员？',function(res){
+			if(res){
+				$.ajax({
+					type:'post',
+					url:'<{url('delAdmin')}>',
+					data:{'id':id},
+					success:function(data){
+						if(data.code){
+							$('.alert-block').removeClass('alert-danger');
+							$('.alert-block span').html(data.msg);
+							$('.alert-block').addClass('alert-info').show().fadeOut(3000,location.reload());
+						}else{
+							$('.alert-block').removeClass('alert-info');
+							$('.alert-block span').html(data.msg);
+							$('.alert-block').addClass('alert-danger').show().fadeOut(3000);
+						}
+					}
+				});
+			}
+		});
+	}
+</script>
+<{/block}>
