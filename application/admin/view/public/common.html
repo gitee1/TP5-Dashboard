@@ -60,6 +60,7 @@
 								<{$hi}>
 								<br />
 								<{$smarty.session.think.adminname}>
+								<!--获取session中，当前管理员的名称-->
 							</span>
 							<i class="ace-icon fa fa-caret-down"></i>
 						</a>
@@ -83,8 +84,11 @@
 	<div class="main-container" id="main-container">
 		<div id="sidebar" class="sidebar responsive">
 			<ul class="nav nav-list">
+				<!--生成左侧菜单栏-->
 				<{foreach $menu as $pk => $pv}>
-				<{if isset($pv.child) && (count($pv.child)!=0)}>
+				<!--判断是否有子菜单-->
+				<{if null!==$pv.child && (count($pv.child)!=0)}>
+					<!--有子菜单-->
 					<li<{if $pv.url==$parent_url}> class="husb active open" <{else}> class="husb" <{/if}>>
 						<a href="" class="dropdown-toggle">
 							<i class="menu-icon fa <{$pv.icon}>"></i>
@@ -95,8 +99,10 @@
 						</a>
 						<b class="arrow"></b>
 						<ul <{if $parent_url==$pv.url}> class="submenu nav-show" style="display:block;" <{else}> class="submenu nav-hide" style="display:none;" <{/if}>>
+							<!--生成子菜单-->
 							<{foreach $pv.child as $ck => $cv}>
 								<{if $cv.pid==$pv.id}>
+									<!--若当前页面的路径等于该子菜单路径，则添加活动的样式-->
 									<li <{if $child_url==$cv.url}> class="active" <{else}> class="" <{/if}>>
 										<a href="<{url($cv.url)}>">
 											<i class="menu-icon fa <{$cv.icon}>"></i>
@@ -109,6 +115,7 @@
 						</ul>	
 					</li>
 				<{else}>
+				<!--没有子菜单-->
 					<li <{if $child_url==$pv.url}> class="active" <{else}> class="" <{/if}>>
 						<a href="<{url($pv.url)}>">
 							<i class="menu-icon fa <{$pv.icon}>"></i>
@@ -130,6 +137,8 @@
 						<i class="ace-icon fa fa-home home-icon"></i>
 						<a href="<{url('index/index')}>">首页</a>
 					</li>
+					<!--生成面包屑导航-->
+					<!--当前控制器/当前操作-->
 					<{foreach $menu as $pk => $pv}>
 						<{if $pv.url==$parent_url}>
 						<li>
@@ -160,7 +169,8 @@
 			<div class="footer-inner">
 				<div class="footer-content">
 					<span class="bigger-120">
-						 后台管理系统 &copy; <{if $year=='2018'}>2018<{elseif $year<2018}>2018-<{$year}><{/if}>
+						<!--根据年份生成copyright栏-->
+						后台管理系统 &copy; <{if $year=='2018'}>2018<{elseif $year<2018}>2018-<{$year}><{/if}>
 					</span>
 				</div>
 			</div>
