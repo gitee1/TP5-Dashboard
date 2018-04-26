@@ -17,5 +17,4 @@ class Index extends Base{
 	}
 
 
-
 }
